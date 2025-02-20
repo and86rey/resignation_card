@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farewell Message</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+        }
+        img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+            display: block;
+        }
+        .message {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40%;
+            text-align: right;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 
+                -2px -2px 0 black,  
+                 2px -2px 0 black,  
+                -2px  2px 0 black,  
+                 2px  2px 0 black,
+                0 0 10px #00ffff, 0 0 20px #ff00ff;
+            animation: neonGlow 1.5s infinite alternate;
+        }
+        @keyframes neonGlow {
+            0% { text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black, 0 0 10px #00ffff, 0 0 20px #ff00ff; }
+            100% { text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black, 0 0 20px #ff00ff, 0 0 40px #ffff00; }
+        }
+
+        /* Fireworks */
+        .firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: explode 1.5s linear forwards;
+        }
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(3); opacity: 0.7; }
+            100% { transform: scale(5); opacity: 0; }
+        }
+
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            opacity: 0.9;
+            animation: fall 3s linear forwards;
+        }
+        @keyframes fall {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+            40% { transform: translate(var(--x1), var(--y1)) rotate(90deg); opacity: 0.8; }
+            70% { transform: translate(var(--x2), var(--y2)) rotate(180deg); opacity: 0.6; }
+            100% { transform: translate(var(--x3), var(--y3)) rotate(270deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="IMG_1053.png" id="background" alt="Farewell Message">
+        <p class="message">Спасибо за твое резюме 12 лет назад! Ты проделал выдающуюся работу. Пусть твой новый путь будет таким же увлекательным. Удачи!</p>
+    </div>
+
+    <script>
+        function createFirework() {
+            let img = document.getElementById("background");
+            let imgRect = img.getBoundingClientRect();
+
+            let firework = document.createElement("div");
+            firework.classList.add("firework");
+            document.body.appendChild(firework);
+
+            let x = Math.random() * imgRect.width + imgRect.left;
+            let y = Math.random() * imgRect.height + imgRect.top;
+
+            firework.style.left = x + "px";
+            firework.style.top = y + "px";
+
+            let colors = ["#ff0000", "#00ff00", "#0000ff", "#ff00ff", "#ffff00", "#00ffff", "#ff8800"];
+            let randomColor = colors[Math.floor(Math.random() * colors.length)];
+            firework.style.backgroundColor = randomColor;
+            firework.style.boxShadow = `0 0 10px ${randomColor}, 0 0 20px ${randomColor}, 0 0 40px ${randomColor}`;
+
+            for (let i = 0; i < 10; i++) {
+                createConfetti(x, y, randomColor);
+            }
+
+            setTimeout(() => firework.remove(), 1500);
+        }
+
+        function createConfetti(x, y, color) {
+            let confetti = document.createElement("div");
+            confetti.classList.add("confetti");
+            document.body.appendChild(confetti);
+
+            confetti.style.backgroundColor = color;
+            confetti.style.left = x + "px";
+            confetti.style.top = y + "px";
+
+            let x1 = (Math.random() - 0.5) * 150;
+            let y1 = (Math.random() - 0.5) * 100;
+            let x2 = x1 * 0.7;
+            let y2 = y1 + 50;
+            let x3 = x2 * 0.5;
+            let y3 = y2 + 80;
+
+            confetti.style.setProperty("--x1", x1 + "px");
+            confetti.style.setProperty("--y1", y1 + "px");
+            confetti.style.setProperty("--x2", x2 + "px");
+            confetti.style.setProperty("--y2", y2 + "px");
+            confetti.style.setProperty("--x3", x3 + "px");
+            confetti.style.setProperty("--y3", y3 + "px");
+
+            setTimeout(() => confetti.remove(), 3000);
+        }
+
+        setInterval(createFirework, 500);
+    </script>
+</body>
+</html>
